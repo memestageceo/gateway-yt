@@ -1,0 +1,21 @@
+# in a namespace not matched by any listener
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: internal-tools
+  namespace: youtube-internal
+spec:
+  parentRefs:
+    - name: youtube-gw
+      namespace: nginx
+      sectionName: https
+  hostnames:
+    - youtube.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: store
+          port: 8080
