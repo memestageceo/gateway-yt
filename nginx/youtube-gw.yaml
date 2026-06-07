@@ -1,0 +1,29 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: youtube-gw
+  namespace: nginx
+spec:
+  gatewayClassName: nginx
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      # hostname: foo.example.com
+    - name: https
+      protocol: HTTPS
+      port: 443
+      # hostname: foo.example.com
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              shared-gateway-access: "true"
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            group: ""
+            name: youtube-tls
+            namespace: youtube-certs
