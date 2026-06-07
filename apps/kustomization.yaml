@@ -1,0 +1,10 @@
+resources:
+  - ./music.yaml
+  - ./shorts.yaml
+  - ./studio.yaml
+  - ./upload.yaml
+  - ./watch-canary.yaml
+  - ./watch-v1.yaml
+  - ./watch-v2.yaml
+
+namespace: youtube-apps

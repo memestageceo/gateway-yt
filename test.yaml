@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: test
+  name: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+      - image: ealen/echo-server
+        name: echo-server
+        resources: {}
+        env:
+          - name: VARIANT
+            value: v1
+status: {}

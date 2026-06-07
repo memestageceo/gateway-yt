@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: watch-canary
+  name: watch-canary
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: watch-canary
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: watch-canary
+    spec:
+      containers:
+        - image: ealen/echo-server
+          name: echo-server
+          resources: {}
+          env:
+            - name: VARIANT
+              value: canary
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: watch-canary
+  name: svc-watch-canary
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: watch-canary
+status:
+  loadBalancer: {}

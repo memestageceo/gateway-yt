@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: music
+  name: music
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: music
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: music
+    spec:
+      containers:
+        - image: ealen/echo-server
+          name: echo-server
+          resources: {}
+          env:
+            - name: VARIANT
+              value: v1
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: music
+  name: svc-music
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: music
+status:
+  loadBalancer: {}

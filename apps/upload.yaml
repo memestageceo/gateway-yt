@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: upload
+  name: upload
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: upload
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: upload
+    spec:
+      containers:
+        - image: ealen/echo-server
+          name: echo-server
+          resources: {}
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: VARIANT
+              value: v1
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: upload
+  name: svc-upload
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: upload
+status:
+  loadBalancer: {}

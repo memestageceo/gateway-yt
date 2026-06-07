@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: watch-v1
+  name: watch-v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: watch-v1
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: watch-v1
+    spec:
+      containers:
+        - image: ealen/echo-server
+          name: echo-server
+          resources: {}
+          env:
+            - name: VARIANT
+              value: v1
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: watch-v1
+  name: svc-watch-v1
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: watch-v1
+status:
+  loadBalancer: {}
