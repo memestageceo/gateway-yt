@@ -1,0 +1,18 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: redirect-http-to-https
+  namespace: youtube-apps
+spec:
+  parentRefs:
+    - name: youtube-gw
+      namespace: nginx
+      sectionName: http
+  hostnames:
+    - youtube.com
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301
