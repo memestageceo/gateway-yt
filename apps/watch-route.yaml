@@ -23,3 +23,52 @@ spec:
               type: ReplaceFullPath
               replaceFullPath: /watch
             statusCode: 302
+
+---
+# if desktop && `cohort=stable` ->
+# - watch-v2
+# - (mirror) canary
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: split-watch
+spec:
+  parentRefs:
+    - name: youtube-gw
+      namespace: nginx
+      sectionName: https
+  hostnames:
+    - youtube.com
+  rules:
+    - matches:
+        - path: # match legacy version
+            type: PathPrefix
+            value: /watch
+          headers:
+            - name: env
+              value: stable
+              type: Exact
+          queryParams:
+            - name: app
+              value: desktop
+      filters:
+        # mirrors request to canary
+        - type: RequestMirror
+          requestMirror:
+            backendRef:
+              name: svc-watch-canary
+              port: 80
+      backendRefs:
+        - name: svc-watch-v1
+          port: 80
+          weight: 80 # set to 0 to finish deployment
+        - name: watch-v2
+          port: 80
+          weight: 20
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /watch
+      backendRefs:
+        - name: svc-watch-v1
+          port: 80
