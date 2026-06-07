@@ -6,5 +6,6 @@ resources:
   - ./watch-canary.yaml
   - ./watch-v1.yaml
   - ./watch-v2.yaml
+  - ./watch-route.yaml
 
 namespace: youtube-apps
