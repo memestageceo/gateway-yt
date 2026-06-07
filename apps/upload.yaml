@@ -20,8 +20,7 @@ spec:
           name: echo-server
           resources: {}
           ports:
-            - name: http
-              containerPort: 8080
+            - containerPort: 80
           env:
             - name: VARIANT
               value: v1
@@ -35,9 +34,9 @@ metadata:
   name: svc-upload
 spec:
   ports:
-    - port: 80
+    - port: 8080
       protocol: TCP
-      targetPort: 8080
+      targetPort: 80
   selector:
     app: upload
 status:
